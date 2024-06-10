@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <link rel="stylesheet" href="styles.CSS">
+</head>
+<body>
+    <div class="container">
+        <h1>Job Hunt Registration</h1>
+        <form id="registrationForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="Jobs">Jobs Available:</label>
+            <select id="Jobs" name="Jobs" required>
+                <option value="Jollibee Employee">Jollibee Employee</option>
+                <option value="Callcenter Agent">Callcenter Agent</option>
+                <option value="Sales Man\Woman">Sales Man\Woman</option>
+                <option value="Assistant Manager">Assistant Manager</option>
+                <option value="Delivery Rider">Delivery Rider</option>
+            </select>
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <div class="Job-Hunters">
+        <h2>Jobs Hunters</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Job</th>
+                </tr>
+            </thead>
+            <tbody id="JobHunterTableBody">
+                <!-- Student rows will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const email = document.getElementById('email').value;
+            const Jobs = document.getElementById('Jobs').value;
+
+            // Create student object
+            const JobHunter = {
+                name: name,
+                age: age,
+                email: email,
+                Jobs: Jobs
+            };
+
+            // Get existing students from localStorage
+            let JobHunters = localStorage.getItem('JobHunters');
+            if (JobHunters) {
+                JobHunters = JSON.parse(JobHunters);
+            } else {
+                JobHunters = [];
+            }
+
+            // Add new student to the array
+            JobHunters.push(JobHunter);
+
+            // Save updated students array back to localStorage
+            localStorage.setItem('JobHunters', JSON.stringify(JobHunters));
+
+            // Clear the form
+            document.getElementById('registrationForm').reset();
+
+            // Update the student list display
+            displayJobHunters();
+
+            alert('JobHunter registered successfully!');
+        });
+
+        function displayJobHunters() {
+            const JobHunterTableBody = document.getElementById('JobHunterTableBody');
+            JobHunterTableBody.innerHTML = '';
+
+            // Get students from localStorage
+            const JobHunters = JSON.parse(localStorage.getItem('JobHunters')) || [];
+
+            // Display each student in the table
+            JobHunters.forEach((JobHunter, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${JobHunter.name}</td>
+                    <td>${JobHunter.age}</td>
+                    <td>${JobHunter.email}</td>
+                    <td>${JobHunter.Jobs}</td>
+                `;
+                JobHunterTableBody.appendChild(row);
+            });
+        }
+
+        // Display students on page load
+        displayJobHunter();
+    </script>
+</body>
+</html>
